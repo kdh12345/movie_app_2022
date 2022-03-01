@@ -1,53 +1,21 @@
-import React from "react";
-import axios from 'axios';
-import Movie  from "./movie";
+import React from 'react';
 import './App.css';
+import { HashRouter, Route } from 'react-router-dom';
+import Home from './routes/Home';
+import About from './routes/About';
+import Navigation from "./components/Navigation";
+import Detail from './routes/Detail';
 
-class App extends React.Component{
-  state = {
-    isLoading: true,
-    movies:[],
-  };
-  getmovies = async () =>{
-       //const movies = await axios.get("https://yts-proxy.now.sh/list_movies.json");
-       const{
-         data: {
-           data: { movies },
-         },
-       } = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by=rating");
-       //console.log(movies);
-       this.setState({ movies, isLoading: false});
-  }
-  componentDidMount(){
-    //영화 데이터 로딩!
-   /* setTimeout(() => {
-      this.state({ isLoading: false });
-    }, 3000);*/
-    //axios.get('https://yts-proxy.now.sh/list_movies.json');
-    this.getmovies();
-  }
-  render(){
-    const{isLoading, movies } = this.state;
-    return( <section class="container">
-            {isLoading ? <div class="loader">
-                           <span class="loader__text">Loading..!!</span>
-                          </div> : (
-                                  <div class="movies">
-                                    {movies.map((movie) =>(
-                                     <Movie
-                                        key     = {movie.id}
-                                        id      = {movie.id}
-                                        year    = {movie.year}
-                                        title   = {movie.title}
-                                        summary = {movie.summary}
-                                        poster  = {movie.medium_cover_image}
-                                      />
-                                    ))}
-                                  </div>
-                          )}
-            </section>
-    );
-  }
+
+function App(){
+  return (
+    <HashRouter>
+        <Navigation />
+        <Route path="/" exact={true} component={Home} />
+        <Route path="/about" component={About} />
+        <Route path="/movie-detail" component={Detail} />
+    </HashRouter>
+  );
+  //return <Home />
 }
-
 export default App;
